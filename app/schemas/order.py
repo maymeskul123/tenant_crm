@@ -3,13 +3,14 @@ from datetime import datetime
 from typing import Optional
 
 class OrderBase(BaseModel):
+    tenant_id: int
     order_number: str
     description: Optional[str] = None
     amount: float
     status: str = "pending"
 
 class OrderCreate(OrderBase):
-    tenant_id: int
+    pass
 
 class OrderUpdate(BaseModel):
     order_number: Optional[str] = None
@@ -19,9 +20,8 @@ class OrderUpdate(BaseModel):
 
 class OrderResponse(OrderBase):
     id: int
-    tenant_id: int
     created_at: datetime
     updated_at: datetime
-    
+
     class Config:
         from_attributes = True

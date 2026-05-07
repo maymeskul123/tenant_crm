@@ -1,9 +1,17 @@
-````
+from app.schemas.tenant import (
+    TenantBase,
+    TenantCreate,
+    TenantUpdate,
+    TenantResponse,
+)
+from app.schemas.order import (
+    OrderBase,
+    OrderCreate,
+    OrderUpdate,
+    OrderResponse,
+)
 
-````python
-<vscode_codeblock_uri>file:///home/vitalik/work_programms/tenant_crm/app/crud/__init__.py</vscode_codeblock_uri>````
-
-````python
-<vscode_codeblock_uri>file:///home/vitalik/work_programms/tenant_crm/app/routes/__init__.py</vscode_codeblock_uri>````
-
-Продолжаем с Docker файлами и docker-compose?
+__all__ = [
+    "TenantBase", "TenantCreate", "TenantUpdate", "TenantResponse",
+    "OrderBase", "OrderCreate", "OrderUpdate", "OrderResponse"
+]

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 
 class TenantBase(BaseModel):
     name: str
@@ -21,9 +21,6 @@ class TenantResponse(TenantBase):
     id: int
     created_at: datetime
     updated_at: datetime
-    
+
     class Config:
         from_attributes = True
-
-class TenantWithOrders(TenantResponse):
-    orders: List['OrderResponse'] = []

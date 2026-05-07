@@ -2,15 +2,6 @@ from sqlalchemy.orm import Session
 from app.models.tenant import Tenant
 from app.schemas.tenant import TenantCreate, TenantUpdate
 
-def get_tenant(db: Session, tenant_id: int):
-    return db.query(Tenant).filter(Tenant.id == tenant_id).first()
-
-def get_tenant_by_email(db: Session, email: str):
-    return db.query(Tenant).filter(Tenant.email == email).first()
-
-def get_all_tenants(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(Tenant).offset(skip).limit(limit).all()
-
 def create_tenant(db: Session, tenant: TenantCreate):
     db_tenant = Tenant(**tenant.dict())
     db.add(db_tenant)
@@ -18,21 +9,25 @@ def create_tenant(db: Session, tenant: TenantCreate):
     db.refresh(db_tenant)
     return db_tenant
 
+def get_tenants(db: Session):
+    return db.query(Tenant).all()
+
+def get_tenant(db: Session, tenant_id: int):
+    return db.query(Tenant).filter(Tenant.id == tenant_id).first()
+
 def update_tenant(db: Session, tenant_id: int, tenant: TenantUpdate):
-    db_tenant = get_tenant(db, tenant_id)
-    if not db_tenant:
-        return None
-    update_data = tenant.dict(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(db_tenant, field, value)
-    db.commit()
-    db.refresh(db_tenant)
+    db_tenant = db.query(Tenant).filter(Tenant.id == tenant_id).first()
+    if db_tenant:
+        update_data = tenant.dict(exclude_unset=True)
+        for key, value in update_data.items():
+            setattr(db_tenant, key, value)
+        db.commit()
+        db.refresh(db_tenant)
     return db_tenant
 
 def delete_tenant(db: Session, tenant_id: int):
-    db_tenant = get_tenant(db, tenant_id)
-    if not db_tenant:
-        return None
-    db.delete(db_tenant)
-    db.commit()
+    db_tenant = db.query(Tenant).filter(Tenant.id == tenant_id).first()
+    if db_tenant:
+        db.delete(db_tenant)
+        db.commit()
     return db_tenant
